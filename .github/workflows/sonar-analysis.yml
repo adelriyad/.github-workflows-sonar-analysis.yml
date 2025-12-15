@@ -1,0 +1,32 @@
+name: SonarCloud Analysis
+
+on:
+  # تشغيل التحليل عند كل دفع (Push) إلى الفرع الرئيسي (main)
+  push:
+    branches:
+      - main
+  # تشغيل التحليل عند فتح أو تحديث طلبات السحب (Pull Requests)
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  analysis:
+    runs-on: ubuntu-latest # بيئة التشغيل Linux المطلوبة
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          # ضروري لجلب سجل التغييرات بالكامل لتحليل دقيق
+          fetch-depth: 0 
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2.1.1
+        env:
+          # استخدام الرمز السري الذي قمت بتخزينه في الخطوة 3
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
+        with:
+          # يجب استبدال هذه القيم بالقيم الخاصة بمشروعك من SonarCloud
+          args: >
+            -Dsonar.organization=YOUR_ORGANIZATION_KEY
+            -Dsonar.projectKey=YOUR_PROJECT_KEY
+            -Dsonar.sources=.
