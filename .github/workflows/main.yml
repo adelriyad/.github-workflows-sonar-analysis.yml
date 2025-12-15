@@ -1,0 +1,29 @@
+name: SonarCloud Analysis
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2.1.1
+        env:
+          # هذا المتغير يستخدم الرمز السري الذي قمت بتخزينه
+          SONAR_TOKEN: ${{ fb6a31621ad974b747a5d027330dc14f93d0b3e2}} 
+        with:
+          # تم تعديل هذه القيم لتناسب مشروعك
+          args: >
+            -Dsonar.organization=adelriyad
+            -Dsonar.projectKey=adelryed
+            -Dsonar.sources=.
